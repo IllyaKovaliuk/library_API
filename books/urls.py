@@ -8,6 +8,8 @@ from books.views import *
 
 
 router = routers.DefaultRouter()
+router.register("Books", BookViewSet)
+
 
 urlpatterns = [
     path('', include(router.urls)),
