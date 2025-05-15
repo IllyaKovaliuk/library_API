@@ -6,3 +6,18 @@ class BookSerializer(serializers.ModelSerializer):
         model = Book
         fields =("id", "title", "author", "cover", "inventory", "daily_fee")
 
+class BookListSerializer(BookSerializer):
+    class Meta(BookSerializer.Meta):
+        fields = BookSerializer.Meta.fields
+
+class BookCreateSerializer(BookSerializer):
+    class Meta(BookSerializer.Meta):
+        fields = BookSerializer.Meta.fields
+
+
+class BookRetrieveSerializers(BookSerializer):
+    class Meta(BookSerializer.Meta):
+        fields = BookSerializer.Meta.fields
+
+
+
