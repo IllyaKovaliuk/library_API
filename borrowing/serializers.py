@@ -1,9 +1,11 @@
 from datetime import datetime, date
 
+from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from books.models import Book
 from books.serializers import BookSerializer
+from user.models import User
 from user.serializers import UserSerializer
 from .models import Borrowing
 
@@ -19,11 +21,15 @@ class BorrowingSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Borrowing
-        fields = ("id", "borrow_date","expected_return", "actual_return", "book", "book_name", "user", "username", "is_active")
+        fields = ("id", "borrow_date","expected_return", "actual_return", "book", "book_name", "username", "is_active")
+        read_only_fields = ("username",)
 
     def get_is_active(self, obj):
         return obj.actual_return is None or obj.actual_return > date.today()
 
+    def create(self, validated_data):
+        validated_data['user'] = self.context['request'].user
+        return super().create(validated_data)
 
 class BorrowingListSerializer(BorrowingSerializer):
     class Meta:

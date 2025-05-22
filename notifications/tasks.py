@@ -1,7 +1,20 @@
-from celery import Celery
+from datetime import date
 
-app = Celery('tasks', broker='redis://localhost')
+from celery import Celery, shared_task
+from django.utils import timezone
 
-@app.task
-def add(x, y):
-    return x + y
+from borrowing.models import Borrowing
+from notifications.telegram import send_message
+from notifications.telegram import send_reminder_telegram
+
+
+app = Celery('tasks', broker='redis://localhost',backend='redis://localhost')
+
+@shared_task
+def send_notification(message):
+    send_message(message)
+
+
+@shared_task
+def send_reminder(reminder):
+    send_reminder_telegram(reminder)
